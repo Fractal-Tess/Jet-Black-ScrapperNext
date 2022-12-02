@@ -1,6 +1,6 @@
-import { dotenv } from '@deps'
+import { config } from '@deps'
 
-dotenv.config({ export: true })
+config({ export: true })
 
 interface ConfigSchema {
   POCKET_BASE_URL: string
