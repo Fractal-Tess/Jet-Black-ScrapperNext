@@ -15,7 +15,7 @@ export enum IdentifierType {
   API = 'api'
 }
 
-export type Identifiers = {
+export type LogIdentifiers = {
   idenKind: IdentifierKind
   idenName: IdentifierName
   idenType: IdentifierType
