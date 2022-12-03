@@ -1,4 +1,4 @@
-import { Identifiers } from '@types'
+import { LogIdentifiers } from '@types'
 import { log, colors, path, Subject } from '@deps'
 
 const stringifyArgs = (args?: unknown[]) => {
@@ -16,7 +16,7 @@ class ConsoleLogger extends log.handlers.BaseHandler {
   identifier
   subject
 
-  constructor(level: log.LevelName, identifier: Identifiers, subject: Subject<string>) {
+  constructor(level: log.LevelName, identifier: LogIdentifiers, subject: Subject<string>) {
     super(level)
     this.identifier = identifier
     this.subject = subject
@@ -62,7 +62,7 @@ class FileLogger extends log.handlers.FileHandler {
   }
 }
 
-export const crateLogger = async (identifiers: Identifiers, subject: Subject<string>) => {
+export const crateLogger = async (identifiers: LogIdentifiers, subject: Subject<string>) => {
   const fUrl = path.fromFileUrl(new URL('.', import.meta.url).href)
   const logsDir = path.join(
     fUrl,
@@ -72,7 +72,7 @@ export const crateLogger = async (identifiers: Identifiers, subject: Subject<str
 
   await log.setup({
     handlers: {
-      // console: new ConsoleLogger('DEBUG', identifiers, subject),
+      console: new ConsoleLogger('DEBUG', identifiers, subject),
       file_all: new FileLogger('DEBUG', {
         mode: 'a',
         filename: logsDir + '/logs.log'
