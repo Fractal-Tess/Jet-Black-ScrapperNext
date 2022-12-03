@@ -3,6 +3,7 @@
     "/": "./",
     "./": "./",
     "@deps": "./deps.ts",
-    "@logger": "./src/logger.ts"
+    "@logger": "./src/logger.ts",
+    "@types": "./src/types/index.ts"
   }
 }
