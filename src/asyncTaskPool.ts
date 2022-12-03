@@ -1,4 +1,4 @@
-export class AsyncTaskRunner<T> {
+export class AsyncTaskPool<T> {
   queue: Promise<T>[] = []
   size: number
 
@@ -14,7 +14,6 @@ export class AsyncTaskRunner<T> {
     const result = task()
     this.queue.push(result)
 
-    // When the task
     result
       .then(data => {
         if (handler) handler(data)
