@@ -1,6 +1,6 @@
-import { assertEquals } from 'https://deno.land/std@0.167.0/testing/asserts.ts'
+import { test } from '@deps'
 
 Deno.test('Testing simple math', () => {
   let s = 1 + 2
-  assertEquals(s, 3)
+  test.assertEquals(s, 3)
 })
