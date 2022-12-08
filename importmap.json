@@ -4,6 +4,12 @@
     "./": "./",
     "@deps": "./deps.ts",
     "@logger": "./src/logger.ts",
-    "@types": "./src/types/index.ts"
+    "@types": "./src/types/index.ts",
+    "@config": "./src/config.ts",
+    "@models/": "./src/models/",
+    "@scrappers/": "./src/scrappers/",
+    "@utils": "./src/utils.ts",
+    "@validators/": "./src/validators/",
+    "@db": "./src/pocketbase.ts"
   }
 }

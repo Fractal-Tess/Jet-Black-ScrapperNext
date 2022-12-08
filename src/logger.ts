@@ -1,5 +1,11 @@
-import { LogIdentifiers } from '@types'
-import { log, colors, path, Subject } from '@deps'
+import { log, colors, path, ReplaySubject } from '@deps'
+import { getEnv } from '@config'
+
+type LoggerIdentifier = {
+  name?: 'gogoanime' | 'mangakakalot'
+  type: 'anime' | 'manga' | 'html'
+  kind: 'scrapper' | 'api' | 'model' | 'cache'
+}
 
 const stringifyArgs = (args?: unknown[]) => {
   if (args)
@@ -14,20 +20,21 @@ const stringifyArgs = (args?: unknown[]) => {
 // @ts-ignore
 class ConsoleLogger extends log.handlers.BaseHandler {
   identifier
-  subject
+  rpSubject
 
-  constructor(level: log.LevelName, identifier: LogIdentifiers, subject: Subject<string>) {
+  constructor(level: log.LevelName, identifier: LoggerIdentifier, rpSubject?: ReplaySubject<string>) {
     super(level)
     this.identifier = identifier
-    this.subject = subject
+    this.rpSubject = rpSubject
   }
 
   override format(logRecord: log.LogRecord): string {
-    let msg = `${logRecord.datetime.toISOString()} | ${logRecord.levelName} [${this.identifier.idenKind}] [${
-      this.identifier.idenName
-    }] {${this.identifier.idenType}} - ${logRecord.msg} ${stringifyArgs(logRecord.args).join('\n')}`
+    // maybe fix this abomination?
+    let msg = `${logRecord.datetime.toISOString()} | ${logRecord.levelName} [${this.identifier.kind}] ${
+      this.identifier.name ? `[${this.identifier.name}] ` : ''
+    }{${this.identifier.type}} - ${logRecord.msg} ${stringifyArgs(logRecord.args).join('\n')}`
 
-    this.subject.next(msg)
+    this.rpSubject?.next(msg)
 
     switch (logRecord.level) {
       case log.LogLevels.INFO:
@@ -62,18 +69,18 @@ class FileLogger extends log.handlers.FileHandler {
   }
 }
 
-export const crateLogger = async (identifiers: LogIdentifiers, subject: Subject<string>) => {
+export const createLogger = async (identifier: LoggerIdentifier, subject?: ReplaySubject<string>) => {
   const fUrl = path.fromFileUrl(new URL('.', import.meta.url).href)
   const logsDir = path.join(
     fUrl,
-    `../logs/${identifiers.idenKind}/${identifiers.idenName}/${identifiers.idenType}`
+    `../logs/${identifier.type}/${identifier.name ? `${identifier.name}/` : ''}${identifier.kind}`
   )
   Deno.mkdirSync(logsDir, { recursive: true })
 
   await log.setup({
     handlers: {
-      console: new ConsoleLogger('DEBUG', identifiers, subject),
-      file_all: new FileLogger('DEBUG', {
+      console: new ConsoleLogger(getEnv('LOG_LEVEL'), identifier, subject),
+      file_all: new FileLogger(getEnv('LOG_LEVEL'), {
         mode: 'a',
         filename: logsDir + '/logs.log'
       }),

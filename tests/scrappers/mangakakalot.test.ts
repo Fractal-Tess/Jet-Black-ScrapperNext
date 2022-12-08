@@ -1,6 +1,9 @@
-import { test } from '@deps'
+import { indexPage } from '@scrappers/manga/mangakakalot.ts'
+import { describe, it } from '@deps'
 
-Deno.test('Testing simple math', () => {
-  let s = 1 + 2
-  test.assertEquals(s, 3)
+describe('Mangakakalot scrapper', () => {
+  it('indexer scrapes first page of mangakakalot', async () => {
+    const result = await indexPage(1)
+    console.log(result)
+  })
 })

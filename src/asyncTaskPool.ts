@@ -15,17 +15,15 @@ export class AsyncTaskPool<T> {
     this.queue.push(result)
 
     result
-      .then(data => {
-        if (handler) handler(data)
+      .then(async data => {
+        if (handler) await handler(data)
       })
       .catch(error => {
         console.error('Something wrong happened', error)
       })
       .finally(() => {
         this.queue.find((task, idx) => {
-          if (task === result) {
-            this.queue.splice(idx, 1)
-          }
+          if (task === result) this.queue.splice(idx, 1)
         })
       })
   }

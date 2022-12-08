@@ -4,24 +4,33 @@ const config: DenonConfig = {
   scripts: {
     start: {
       cmd: 'deno run src/main.ts',
-      desc: 'Starting scrapper',
+      desc: 'Starting deno',
       importMap: './importmap.json',
       allow: ['net', 'read', 'write', 'env'],
-      unstable: true
+      unstable: true,
+      watch: true
     },
-    test: {
-      cmd: 'deno test',
+    test_verbose: {
+      cmd: 'deno  test',
       desc: 'Performing unit test',
       importMap: './importmap.json',
-      allow: ['net', 'read', 'write'],
-      unstable: true
+      allow: ['net', 'read', 'write', 'env'],
+      unstable: true,
+      watch: true
+    },
+    test: {
+      cmd: 'deno  test --quiet',
+      desc: 'Performing unit test',
+      importMap: './importmap.json',
+      allow: ['net', 'read', 'write', 'env'],
+      unstable: true,
+      watch: true
     }
   },
   watcher: {
     interval: 0,
-    paths: [''],
     exts: ['ts'],
-    skip: ['**/.git/**', '**/logs/**', '**/example/**', '**/.vscode/***']
+    skip: ['.git/*', '.vscode/*']
   }
 }
 
